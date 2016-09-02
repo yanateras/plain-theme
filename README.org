@@ -1,0 +1,15 @@
+Black and white Emacs theme with no syntax highlighting.
+
+** Rationale
+   Syntax highlighting [[http://www.linusakesson.net/programming/syntaxhighlighting/index.php][is harmful]].
+   This theme provides a reliable way for turning off syntax highlighting in Emacs.
+   
+   Disabling [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html][font-lock-mode]] doesn't offer the same flexibility:
+
+   1) It disables useful and convenient things that are not syntax highlighting, such as
+      italics and underlined links in [[http://jblevins.org/projects/markdown-mode/][markdown-mode]], [[orgmode.org][org-mode]] transformations, et cetera.
+   2) It conflicts with some packages — [[https://github.com/clojure-emacs/cider][CIDER]] enables it back when you M-x cider-jack-in.
+
+** Screenshots
+   [[https://yegortimoshenko.s3.amazonaws.com/plain-theme-1.png]]
+   [[https://yegortimoshenko.s3.amazonaws.com/plain-theme-2.png]]
