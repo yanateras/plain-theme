@@ -1,10 +1,10 @@
-;;; plain-theme.el --- Black and white theme without syntax highlighting
+;;; plain-theme.el --- Plain theme without syntax highlighting
 
 ;; Copyright (C) 2016 Yegor Timoshenko
 
 ;; Author: Yegor Timoshenko <yegortimoshenko@gmail.com>
 ;; URL: https://github.com/yegortimoshenko/plain-theme
-;; Version: 4
+;; Version: 5
 
 ;; Permission to use, copy, modify, and/or distribute this software for any
 ;; purpose with or without fee is hereby granted, provided that the above
@@ -20,107 +20,49 @@
 
 ;;; Code:
 
-(deftheme plain)
+(deftheme plain "Plain theme without syntax highlighting")
 
-(defvar plain-faces
-  `(default
-    eshell-prompt
-    font-lock-builtin-face
-    font-lock-comment-delimiter-face
-    font-lock-comment-face
-    font-lock-constant-face
-    font-lock-doc-face
-    font-lock-function-name-face
-    font-lock-keyword-face
-    font-lock-negation-char-face
-    font-lock-function-name-face
-    font-lock-keyword-face
-    font-lock-negation-char-face
-    font-lock-preprocessor-face
-    font-lock-regexp-grouping-backslash
-    font-lock-regexp-grouping-construct
-    font-lock-string-face
-    font-lock-type-face
-    font-lock-variable-name-face
-    font-lock-warning-face
-    fringe
-    mode-line
-    sh-quoted-exec
-    web-mode-error-face
-    web-mode-warning-face
-    web-mode-preprocessor-face
-    web-mode-block-delimiter-face
-    web-mode-block-control-face
-    web-mode-builtin-face
-    web-mode-symbol-face
-    web-mode-doctype-face
-    web-mode-html-tag-face
-    web-mode-html-tag-custom-face
-    web-mode-html-tag-namespaced-face
-    web-mode-html-tag-bracket-face
-    web-mode-html-attr-name-face
-    web-mode-html-attr-custom-face
-    web-mode-html-attr-engine-face
-    web-mode-html-attr-equal-face
-    web-mode-html-attr-value-face
-    web-mode-block-attr-name-face
-    web-mode-block-attr-value-face
-    web-mode-variable-name-face
-    web-mode-css-selector-face
-    web-mode-css-pseudo-class-face
-    web-mode-css-at-rule-face
-    web-mode-css-property-name-face
-    web-mode-css-color-face
-    web-mode-css-priority-face
-    web-mode-css-function-face
-    web-mode-css-variable-face
-    web-mode-function-name-face
-    web-mode-filter-face
-    web-mode-function-call-face
-    web-mode-string-face
-    web-mode-block-string-face
-    web-mode-part-string-face
-    web-mode-javascript-string-face
-    web-mode-css-string-face
-    web-mode-json-key-face
-    web-mode-json-context-face
-    web-mode-json-string-face
-    web-mode-comment-face
-    web-mode-block-comment-face
-    web-mode-part-comment-face
-    web-mode-json-comment-face
-    web-mode-javascript-comment-face
-    web-mode-css-comment-face
-    web-mode-constant-face
-    web-mode-type-face
-    web-mode-keyword-face
-    web-mode-param-name-face
-    web-mode-whitespace-face
-    web-mode-inlay-face
-    web-mode-block-face
-    web-mode-part-face
-    web-mode-script-face
-    web-mode-style-face
-    web-mode-folded-face
-    web-mode-bold-face
-    web-mode-italic-face
-    web-mode-underline-face
-    web-mode-current-element-highlight-face
-    web-mode-current-column-highlight-face
-    web-mode-comment-keyword-face
-    web-mode-sql-keyword-face
-    web-mode-html-entity-face
-    web-mode-jsx-depth-1-face
-    web-mode-jsx-depth-2-face
-    web-mode-jsx-depth-3-face
-    web-mode-jsx-depth-4-face))
+(defgroup plain-theme nil
+  "Plain theme colors and faces"
+  :group 'faces
+  :prefix "plain-")
 
-(let ((black "#000")
-      (white "#fff"))
-  (apply 'custom-theme-set-faces 'plain
-   `(mode-line ((t (:box (:line-width 1)))))
-   `(cursor ((t (:background ,black :foreground ,white))))
-    (mapcar (lambda (n) `(,n ((t (:background ,white :foreground ,black))))) plain-faces)))
+(defcustom plain-background "white"
+  "Color to use for background"
+  :type 'color)
+
+(defcustom plain-foreground "black"
+  "Color to use for text"
+  :type 'color)
+
+(defcustom plain-faces '(cursor default eshell-prompt fringe)
+  "List of faces to decolorize"
+  :type '(repeat symbol))
+
+(defcustom plain-prefix-alist
+  '((font-lock . "font-lock-")
+    (sh-script . "sh-")
+    (web-mode . "web-mode-"))
+  "Mapping from files to face prefixes: when file is first loaded,
+decolorizes all faces that start with the prefix"
+  :type '(alist :key-type symbol :value-type string))
+
+(require 'cl-lib)
+
+(defun plain--face-list (prefix)
+  (cl-remove-if-not (lambda (s) (string-prefix-p prefix (symbol-name s)))
+		    (face-list)))
+
+(defun plain--face-spec (face)
+  `(,face ((t (:background ,plain-background :foreground ,plain-foreground)))))
+
+(defun plain--set-faces (faces)
+  (apply 'custom-theme-set-faces 'plain (mapcar 'plain--face-spec faces)))
+
+(plain--set-faces plain-faces)
+
+(dolist (a plain-prefix-alist)
+  (eval-after-load (car a) `(plain--set-faces (plain--face-list ,(cdr a)))))
 
 ;;;###autoload
 (when load-file-name
