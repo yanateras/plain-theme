@@ -4,7 +4,7 @@
 
 ;; Author: Yegor Timoshenko <yegortimoshenko@gmail.com>
 ;; URL: https://github.com/yegortimoshenko/plain-theme
-;; Version: 5
+;; Version: 6
 
 ;; Permission to use, copy, modify, and/or distribute this software for any
 ;; purpose with or without fee is hereby granted, provided that the above
@@ -35,7 +35,7 @@
   "Color to use for text"
   :type 'color)
 
-(defcustom plain-faces '(cursor default eshell-prompt fringe)
+(defcustom plain-faces '(cursor default eshell-prompt fringe minibuffer-prompt)
   "List of faces to decolorize"
   :type '(repeat symbol))
 
