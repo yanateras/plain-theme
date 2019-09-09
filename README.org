@@ -8,5 +8,5 @@ Black and white Emacs theme with no syntax highlighting.
    links in [[http://jblevins.org/projects/markdown-mode/][markdown-mode]], [[orgmode.org][org-mode]] transformations, [[https://github.com/clojure-emacs/cider][CIDER]] error highlighting, etc.
 
 ** Screenshots
-   [[https://yegortimoshenko.s3.amazonaws.com/plain-theme-1.png]]
-   [[https://yegortimoshenko.s3.amazonaws.com/plain-theme-2.png]]
+   [[./screenshots/01.png]]
+   [[./screenshots/02.png]]
